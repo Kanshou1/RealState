@@ -1,6 +1,6 @@
 import csv
 import os
-
+from data_types import Purchase
 
 def main():
     print_header()
@@ -26,9 +26,12 @@ def load_file(filename):
     with open(filename, 'r', encoding='latin 1') as fin:
 
         reader = csv.DictReader(fin)
+        purchases = []
         for row in reader:
-            print(type(row), row)
-            print("bed count: {}".format(row['beds']))
+            p = Purchase.create_from_dict(row)
+            purchases.append(p)
+
+        return purchases
 
         # header = fin.readline().strip()
         # reader = csv.reader(fin, delimiter=',')
@@ -50,8 +53,22 @@ def load_file(filename):
 #
 #         print(lines[:5])
 
+# def get_price(p):
+#     return p.price
 
-def query_data(data):
+def query_data(data: list[Purchase]):
+    # if data was sorted by price:
+    # data.sort(key=get_price)
+    data.sort(key= lambda p: p.price)
+    # most expensive house?
+    high_purchase = data[-1]
+    print("The most expensive house is ${:,} with {} beds and {} baths".format(high_purchase.price, high_purchase.beds, high_purchase.baths))
+    # least expensive house?
+    low_purchase = data[0]
+    print("The least expensive house is ${:,} with {} beds and {} baths".format(low_purchase.price, low_purchase.beds, low_purchase.baths))
+
+    # averege price house?
+    # averege price of 2 bedroom houses
     pass
 
 
